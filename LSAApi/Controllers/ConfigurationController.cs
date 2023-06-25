@@ -236,7 +236,7 @@ namespace LSAApi.Controllers
 
             if (!_configurationRepository.DeleteConfiguration(configuration))
             {
-                ModelState.AddModelError("", "Something went wrong deleting category");
+                ModelState.AddModelError("", "Something went wrong deleting configuration");
                 return StatusCode(500, ModelState);
             }
 

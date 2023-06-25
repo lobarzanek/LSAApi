@@ -216,7 +216,7 @@ namespace LSAApi.Controllers
 
             if (!_userRepository.DeleteUser(user))
             {
-                ModelState.AddModelError("", "Something went wrong deleting status");
+                ModelState.AddModelError("", "Something went wrong deleting user");
                 return StatusCode(500, ModelState);
             }
 

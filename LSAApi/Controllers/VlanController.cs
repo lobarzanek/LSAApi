@@ -138,7 +138,7 @@ namespace LSAApi.Controllers
 
             if (!_vlanRepository.DeleteVlan(vlan))
             {
-                ModelState.AddModelError("", "Something went wrong deleting status");
+                ModelState.AddModelError("", "Something went wrong deleting vlan");
                 return StatusCode(500, ModelState);
             }
 

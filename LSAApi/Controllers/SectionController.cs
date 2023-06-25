@@ -138,7 +138,7 @@ namespace LSAApi.Controllers
 
             if (!_sectionRepository.DeleteSection(section))
             {
-                ModelState.AddModelError("", "Something went wrong deleting status");
+                ModelState.AddModelError("", "Something went wrong deleting section");
                 return StatusCode(500, ModelState);
             }
 

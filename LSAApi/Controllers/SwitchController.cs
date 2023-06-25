@@ -292,7 +292,7 @@ namespace LSAApi.Controllers
 
             if (!_switchRepository.DeleteSwitch(ethSwitch))
             {
-                ModelState.AddModelError("", "Something went wrong deleting status");
+                ModelState.AddModelError("", "Something went wrong deleting switch");
                 return StatusCode(500, ModelState);
             }
 
