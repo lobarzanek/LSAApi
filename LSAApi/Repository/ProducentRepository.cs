@@ -39,5 +39,11 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateProducent(Producent producent)
+        {
+            _context.Producents.Update(producent);
+            return Save();
+        }
     }
 }

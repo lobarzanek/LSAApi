@@ -4,6 +4,7 @@ using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -21,7 +22,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Role>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetRoleDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetRoles()
         {
@@ -36,7 +37,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{roleId}")]
-        [ProducesResponseType(200, Type = typeof(Role))]
+        [ProducesResponseType(200, Type = typeof(GetRoleDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetRole(int roleId)
@@ -57,7 +58,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetRoleDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateRole([FromBody] CreateRoleDto newRole)
@@ -76,11 +77,46 @@ namespace LSAApi.Controllers
 
             if (!_roleRepository.CreateRole(roleMap))
             {
-                ModelState.AddModelError("", "Something went wrong whle saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Created("", _mapper.Map<GetRoleDto>(roleMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetRoleDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateRole([FromBody] UpdateRoleDto updateRole)
+        {
+
+            if (updateRole == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_roleRepository.IsExist(updateRole.RoleId))
+            {
+                return NotFound("Role not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var roleMap = _mapper.Map<Role>(updateRole);
+
+            if (!_roleRepository.UpdateRole(roleMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetRoleDto>(roleMap));
         }
     }
 }

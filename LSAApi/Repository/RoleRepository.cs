@@ -39,5 +39,11 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateRole(Role role)
+        {
+            _context.Roles.Update(role);
+            return Save();
+        }
     }
 }

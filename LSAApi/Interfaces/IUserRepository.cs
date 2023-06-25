@@ -9,6 +9,7 @@ namespace LSAApi.Interfaces
         ICollection<User> GetUsersByRole(int roleId);
         bool IsExist (int userId);
         bool CreateUser(User user);
+        bool UpdateUser(User user);
         bool Save();
     }
 }

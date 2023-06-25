@@ -22,7 +22,7 @@ namespace LSAApi.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        [ProducesResponseType((200), Type = typeof(IEnumerable<User>))]
+        [ProducesResponseType((200), Type = typeof(IEnumerable<GetUserDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetUsers()
         {
@@ -37,10 +37,10 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{userId}")]
-        [ProducesResponseType(200, Type = typeof(ConfigStatus))]
+        [ProducesResponseType(200, Type = typeof(GetUserDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult GetConfigStatus(int userId)
+        public IActionResult GetUserById(int userId)
         {
             if (!_userRepository.IsExist(userId))
             {
@@ -58,7 +58,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("role/{roleId}")]
-        [ProducesResponseType((200), Type = typeof(IEnumerable<User>))]
+        [ProducesResponseType((200), Type = typeof(IEnumerable<GetUserDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetUsersByRole(int roleId)
         {
@@ -78,7 +78,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetUserDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateUser([FromBody] CreateUserDto newUser)
@@ -107,6 +107,92 @@ namespace LSAApi.Controllers
             }
 
             return Created("", _mapper.Map<GetUserDto>(userMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetUserDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateUser([FromBody] UpdateUserDto updateUser)
+        {
+
+            if (updateUser == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_userRepository.IsExist(updateUser.UserId))
+            {
+                return NotFound("User not found");
+            }
+
+            if (!_roleRepository.IsExist(updateUser.RoleId))
+            {
+                return NotFound("Role not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = _userRepository.GetUser(updateUser.UserId);
+
+            user.UserName = updateUser.UserName;
+            user.RoleId = updateUser.RoleId;
+
+            if (!_userRepository.UpdateUser(user))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetUserDto>(user));
+        }
+
+        [HttpPut("password")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateUserPassword([FromBody] UpdateUserPasswordDto updateUserPassword)
+        {
+
+            if (updateUserPassword == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_userRepository.IsExist(updateUserPassword.UserId))
+            {
+                return NotFound("User not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = _userRepository.GetUser(updateUserPassword.UserId);
+
+            if (updateUserPassword.OldUserPassword != user.UserPassword)
+            {
+                return Ok("Wrong password");
+            }
+
+            user.UserPassword = updateUserPassword.NewUserPassword;
+
+            if (!_userRepository.UpdateUser(user))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return NoContent();
         }
     }
 }

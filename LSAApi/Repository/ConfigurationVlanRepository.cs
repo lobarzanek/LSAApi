@@ -44,5 +44,11 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateConfigurationVlan(ConfigurationVlan configurationVlan)
+        {
+            _context.ConfigurationVlans.Update(configurationVlan);
+            return Save();
+        }
     }
 }

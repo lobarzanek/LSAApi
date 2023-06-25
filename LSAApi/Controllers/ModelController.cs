@@ -23,7 +23,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType((200), Type = typeof(IEnumerable<Model>))]
+        [ProducesResponseType((200), Type = typeof(IEnumerable<GetModelDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetModels()
         {
@@ -38,12 +38,12 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{modelId}")]
-        [ProducesResponseType((200), Type = typeof(Model))]
+        [ProducesResponseType((200), Type = typeof(GetModelDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetModel(int modelId)
         {
-            if(!_modelRepository.IsExist(modelId))
+            if (!_modelRepository.IsExist(modelId))
             {
                 return NotFound("Model not found");
             }
@@ -59,7 +59,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("producent/{producentId}")]
-        [ProducesResponseType((200), Type = typeof(IEnumerable<Model>))]
+        [ProducesResponseType((200), Type = typeof(IEnumerable<GetModelDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetModelsByProducent(int producentId)
@@ -80,7 +80,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetModelDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateModel([FromBody] CreateModelDto newModel)
@@ -95,7 +95,7 @@ namespace LSAApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            if(!_producentRepository.IsExist(newModel.ProducentId))
+            if (!_producentRepository.IsExist(newModel.ProducentId))
             {
                 return NotFound("Producent not found");
             }
@@ -104,12 +104,50 @@ namespace LSAApi.Controllers
 
             if (!_modelRepository.CreateModel(modelMap))
             {
-                ModelState.AddModelError("", "Something went wrong whle saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Created("", _mapper.Map<GetModelDto>(modelMap));
         }
 
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetModelDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateModel([FromBody] UpdateModelDto updateModel)
+        {
+
+            if (updateModel == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_modelRepository.IsExist(updateModel.ModelId))
+            {
+                return NotFound("Model not found");
+            }
+
+            if (!_producentRepository.IsExist(updateModel.ProducentId))
+            {
+                return NotFound("Producent not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var modelMap = _mapper.Map<Model>(updateModel);
+
+            if (!_modelRepository.UpdateModel(modelMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok(_mapper.Map<GetModelDto>(modelMap));
+        }
     }
 }

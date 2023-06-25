@@ -35,6 +35,19 @@ namespace LSAApi.Helper
             CreateMap<CreateUserDto, User>();
             CreateMap<CreateVlanDto, Vlan>();
 
+            //UpdateDto to Model
+            CreateMap<UpdateConfigStatusDto, ConfigStatus>();
+            CreateMap<UpdateConfigurationDto, Configuration>();
+            CreateMap<UpdateConfigurationVlanDto, ConfigurationVlan>();
+            CreateMap<UpdateModelDto, Model>();
+            CreateMap<UpdateProducentDto, Producent>();
+            CreateMap<UpdateRoleDto, Role>();
+            CreateMap<UpdateSectionDto, Section>();
+            CreateMap<UpdateSwitchDto, Switch>();
+            CreateMap<UpdateSwitchStatusDto, SwitchStatus>();
+            CreateMap<UpdateVlanDto, Vlan>();
+
+
         }
     }
 }

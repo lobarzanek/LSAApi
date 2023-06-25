@@ -22,7 +22,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Producent>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetProducentDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetProducents()
         {
@@ -36,7 +36,7 @@ namespace LSAApi.Controllers
             return Ok(producents);
         }
         [HttpGet("{producentId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Producent>))]
+        [ProducesResponseType(200, Type = typeof(GetProducentDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetProducent(int producentId)
@@ -57,7 +57,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetProducentDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateProducent([FromBody] CreateProducentDto newProducent)
@@ -76,11 +76,46 @@ namespace LSAApi.Controllers
 
             if (!_producentRepository.CreateProducent(producentMap))
             {
-                ModelState.AddModelError("", "Something went wrong whle saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Created("", _mapper.Map<GetProducentDto>(producentMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetProducentDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateProducent([FromBody] UpdateProducentDto updateProducent)
+        {
+
+            if (updateProducent == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_producentRepository.IsExist(updateProducent.ProducentId))
+            {
+                return NotFound("Producent not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var producentMap = _mapper.Map<Producent>(updateProducent);
+
+            if (!_producentRepository.UpdateProducent(producentMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetProducentDto>(producentMap));
         }
     }
 }

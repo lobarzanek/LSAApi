@@ -55,5 +55,11 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateConfiguration(Configuration configuration)
+        {
+            _context.Configurations.Update(configuration);
+            return Save();
+        }
     }
 }

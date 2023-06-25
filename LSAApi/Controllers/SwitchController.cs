@@ -28,7 +28,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Switch>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitches()
         {
@@ -43,7 +43,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{switchId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Switch>))]
+        [ProducesResponseType(200, Type = typeof(GetSwitchDto))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitch(int switchId)
         {
@@ -63,7 +63,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("model/{modelId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Switch>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchesByModel(int modelId)
         {
@@ -83,7 +83,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("status/{statusId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Switch>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchesByStatus(int statusId)
         {
@@ -103,7 +103,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("section/{sectionId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Switch>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchesBySection(int sectionId)
         {
@@ -123,7 +123,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("credentials/{switchId}")]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Switch>))]
+        [ProducesResponseType(200, Type = typeof(GetSwitchCredentialsDto))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchCredentials(int switchId)
         {
@@ -143,7 +143,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetSwitchDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateSwitch([FromBody] CreateSwitchDto newSwitch)
@@ -172,11 +172,103 @@ namespace LSAApi.Controllers
 
             if (!_switchRepository.CreateSwitch(switchMap))
             {
-                ModelState.AddModelError("", "Something went wrong whle saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Created("", _mapper.Map<GetSwitchDto>(switchMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetSwitchDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateSwitch([FromBody] UpdateSwitchDto updateSwitch)
+        {
+
+            if (updateSwitch == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_switchRepository.IsExist(updateSwitch.SwitchId))
+            {
+                return NotFound("Switch not found");
+            }
+            //model
+            if (!_modelRepository.IsExist(updateSwitch.ModelId))
+            {
+                return NotFound("Model not found");
+            }
+            //status
+            if (!_switchStatusRepository.IsExist(updateSwitch.SwitchStatusId))
+            {
+                return NotFound("Status not found");
+            }
+            //section
+            if (updateSwitch.SectionId != null && !_sectionRepository.IsExist(updateSwitch.SectionId.Value))
+            {
+                return NotFound("Section not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var switchMap = _mapper.Map<Switch>(updateSwitch);
+
+            var ethSwitch = _switchRepository.GetSwitch(switchMap.SwitchId);
+
+            switchMap.SwitchLogin = ethSwitch.SwitchLogin;
+            switchMap.SwitchPassword = ethSwitch.SwitchPassword;
+
+            if (!_switchRepository.UpdateSwitch(switchMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetSwitchDto>(switchMap));
+        }
+        [HttpPut("credentials")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateSwitchCredentials([FromBody] UpdateSwitchCredentialsDto updateSwitchCr)
+        {
+
+            if (updateSwitchCr == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_switchRepository.IsExist(updateSwitchCr.SwitchId))
+            {
+                return NotFound("Switch not found");
+            }
+            
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ethSwitch = _switchRepository.GetSwitch(updateSwitchCr.SwitchId);
+
+            ethSwitch.SwitchLogin = updateSwitchCr.SwitchLogin;
+            ethSwitch.SwitchPassword = updateSwitchCr.SwitchPassword;
+
+            if (!_switchRepository.UpdateSwitch(ethSwitch))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok();
         }
 
     }

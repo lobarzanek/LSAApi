@@ -9,6 +9,7 @@ namespace LSAApi.Interfaces
         ICollection<Role> GetRoles();
         bool IsExist(int id);
         bool CreateRole(Role role);
+        bool UpdateRole(Role role);
         bool Save();
     }
 }

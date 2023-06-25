@@ -39,5 +39,11 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateSwitchStatus(SwitchStatus switchStatus)
+        {
+            _context.SwitchStatuses.Update(switchStatus);
+            return Save();
+        }
     }
 }

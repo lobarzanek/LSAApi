@@ -46,5 +46,11 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateModel(Model model)
+        {
+            _context.Models.Update(model);
+            return Save();
+        }
     }
 }

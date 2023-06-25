@@ -21,7 +21,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<SwitchStatus>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchStatusDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetConfigStatuses()
         {
@@ -36,7 +36,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{switchStatusId}")]
-        [ProducesResponseType(200, Type = typeof(SwitchStatus))]
+        [ProducesResponseType(200, Type = typeof(GetSwitchStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetConfigStatus(int switchStatusId)
@@ -57,7 +57,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetSwitchStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateSwitchStatus([FromBody] CreateSwitchStatusDto newSwitchstatus)
@@ -76,11 +76,46 @@ namespace LSAApi.Controllers
 
             if (!_switchStatusRepository.CreateSwitchStatus(switchStatusMap))
             {
-                ModelState.AddModelError("", "Something went wrong whle saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Created("", _mapper.Map<GetSwitchStatusDto>(switchStatusMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateSwitchStatus([FromBody] UpdateSwitchStatusDto updateSwitchStatus)
+        {
+
+            if (updateSwitchStatus == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_switchStatusRepository.IsExist(updateSwitchStatus.SwitchStatusId))
+            {
+                return NotFound("Status not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var switchStatusMap = _mapper.Map<SwitchStatus>(updateSwitchStatus);
+
+            if (!_switchStatusRepository.UpdateSwitchStatus(switchStatusMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetSwitchStatusDto>(switchStatusMap));
         }
     }
 }

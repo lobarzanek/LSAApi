@@ -44,5 +44,14 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateUser(User user)
+        {
+            // to avoid tracking issue
+            _context.ChangeTracker.Clear();
+
+            _context.Users.Update(user);
+            return Save();
+        }
     }
 }

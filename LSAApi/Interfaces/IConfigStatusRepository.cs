@@ -8,6 +8,7 @@ namespace LSAApi.Interfaces
         ICollection<ConfigStatus> GetConfigStatuses();
         bool IsExist(int id);
         bool CreateConfigStatus(ConfigStatus configStatus);
+        bool UpdateConfigStatus(ConfigStatus configStatus);
         bool Save();
     }
 }

@@ -2,6 +2,7 @@
 using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
+using LSAApi.Repository;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LSAApi.Controllers
@@ -25,7 +26,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType((200), Type = typeof(IEnumerable<ConfigurationVlan>))]
+        [ProducesResponseType((200), Type = typeof(IEnumerable<GetConfigurationVlanDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetConfigurationVlans()
         {
@@ -40,7 +41,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{configVlanId}")]
-        [ProducesResponseType((200), Type = typeof(ConfigurationVlan))]
+        [ProducesResponseType((200), Type = typeof(GetConfigurationVlanDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetConfigurationVlan(int configVlanId)
@@ -61,7 +62,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("configuration/{configurationId}")]
-        [ProducesResponseType((200), Type = typeof(IEnumerable<ConfigurationVlan>))]
+        [ProducesResponseType((200), Type = typeof(IEnumerable<GetConfigurationVlanDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetConfigurationVlansByConfig(int configurationId)
@@ -82,7 +83,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetConfigurationVlanDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateConfigurationVlan([FromBody] CreateConfigurationVlanDto newConfigurationVlan)
@@ -111,12 +112,57 @@ namespace LSAApi.Controllers
 
             if (!_configurationVlanRepository.CreateConfigurationVlan(configurationVlanMap))
             {
-                ModelState.AddModelError("", "Something went wrong whle saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
 
             return Created("", _mapper.Map<GetConfigurationVlanDto>(configurationVlanMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetConfigurationVlanDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateConfigurationVlan([FromBody] UpdateConfigurationVlanDto updateConfigurationVlan)
+        {
+
+            if (updateConfigurationVlan == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_configurationVlanRepository.IsExist(updateConfigurationVlan.ConfigurationVlanId))
+            {
+                return NotFound("Configuration Vlan not found");
+            }
+            
+            if (!_configurationRepository.IsExist(updateConfigurationVlan.ConfigurationId))
+            {
+                return NotFound("Configuration not found");
+            }
+            
+            if (!_vlanRepository.IsExist(updateConfigurationVlan.VlanId))
+            {
+                return NotFound("Vlan not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var configurationVlanMap = _mapper.Map<ConfigurationVlan>(updateConfigurationVlan);
+
+            if (!_configurationVlanRepository.UpdateConfigurationVlan(configurationVlanMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetConfigurationVlanDto>(configurationVlanMap));
         }
     }
 }

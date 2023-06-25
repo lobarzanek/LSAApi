@@ -56,5 +56,14 @@ namespace LSAApi.Repository
             var save = _context.SaveChanges();
             return save > 0 ? true : false;
         }
+
+        public bool UpdateSwitch(Switch ethSwitch)
+        {
+            // to avoid tracking issue
+            _context.ChangeTracker.Clear();
+
+            _context.Switches.Update(ethSwitch);
+            return Save();
+        }
     }
 }

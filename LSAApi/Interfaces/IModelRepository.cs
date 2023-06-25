@@ -9,6 +9,7 @@ namespace LSAApi.Interfaces
         ICollection<Model> GetModelsByProducent(int producentId);
         bool IsExist(int modelId);
         bool CreateModel(Model model);
+        bool UpdateModel(Model model);
         bool Save();
     }
 }

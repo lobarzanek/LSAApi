@@ -20,7 +20,7 @@ namespace LSAApi.Controllers
             _mapper = mapper;
         }
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<Vlan>))]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<GetVlanDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetVlans()
         {
@@ -35,7 +35,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{vlanId}")]
-        [ProducesResponseType(200, Type = typeof(Vlan))]
+        [ProducesResponseType(200, Type = typeof(GetVlanDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetVlan(int vlanId)
@@ -56,7 +56,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetVlanDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateVlan([FromBody] CreateVlanDto newVlan)
@@ -80,6 +80,41 @@ namespace LSAApi.Controllers
             }
 
             return Created("", _mapper.Map<GetVlanDto>(vlanMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetVlanDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateVlan([FromBody] UpdateVlanDto updateVlan)
+        {
+
+            if (updateVlan == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_vlanRepository.IsExist(updateVlan.VlanId))
+            {
+                return NotFound("Vlan not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var vlanMap = _mapper.Map<Vlan>(updateVlan);
+
+            if (!_vlanRepository.UpdateVlan(vlanMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetVlanDto>(vlanMap));
         }
     }
 }

@@ -38,7 +38,7 @@ namespace LSAApi.Controllers
         [ProducesResponseType(200, Type = typeof(Section))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
-        public IActionResult GetConfigStatus(int sectionId)
+        public IActionResult GetSection(int sectionId)
         {
             if (!_sectionRepository.IsExist(sectionId))
             {
@@ -56,7 +56,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetSectionDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateSection([FromBody] CreateSectionDto newSection)
@@ -80,6 +80,41 @@ namespace LSAApi.Controllers
             }
 
             return Created("", _mapper.Map<GetSectionDto>(sectionMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetSectionDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateSection([FromBody] UpdateSectionDto updateSection)
+        {
+
+            if (updateSection == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_sectionRepository.IsExist(updateSection.SectionId))
+            {
+                return NotFound("Section not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var sectionMap = _mapper.Map<Section>(updateSection);
+
+            if (!_sectionRepository.UpdateSection(sectionMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+
+            return Ok(_mapper.Map<GetSectionDto>(sectionMap));
         }
     }
 }

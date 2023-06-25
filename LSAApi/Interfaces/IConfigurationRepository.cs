@@ -12,6 +12,7 @@ namespace LSAApi.Interfaces
         ICollection<Configuration> GetConfigurationsByStatus(int statusId);
         bool IsExist(int configId);
         bool CreateConfiguration(Configuration configuration);
+        bool UpdateConfiguration(Configuration configuration);
         bool Save();
 
     }

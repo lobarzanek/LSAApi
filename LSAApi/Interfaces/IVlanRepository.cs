@@ -8,6 +8,7 @@ namespace LSAApi.Interfaces
         ICollection<Vlan> GetVlans();
         bool IsExist(int vlanId);
         bool CreateVlan(Vlan vlan);
+        bool UpdateVlan(Vlan vlan);
         bool Save();
     }
 }

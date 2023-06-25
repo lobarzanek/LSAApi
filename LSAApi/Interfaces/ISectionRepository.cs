@@ -8,6 +8,7 @@ namespace LSAApi.Interfaces
         ICollection<Section> GetSections();
         bool IsExist (int sectionId);
         bool CreateSection(Section section);
+        bool UpdateSection(Section section);
         bool Save();
     }
 }

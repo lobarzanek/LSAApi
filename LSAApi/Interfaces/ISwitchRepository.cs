@@ -11,6 +11,7 @@ namespace LSAApi.Interfaces
         ICollection<Switch> GetSwitchesBySection(int sectionId);
         bool IsExist(int switchId);
         bool CreateSwitch(Switch ethSwitch);
+        bool UpdateSwitch(Switch ethSwitch);
         bool Save();
 
     }

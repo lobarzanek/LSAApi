@@ -8,6 +8,7 @@ namespace LSAApi.Interfaces
         ICollection<SwitchStatus> GetSwitchStatuses();
         bool IsExist(int id);
         bool CreateSwitchStatus(SwitchStatus switchStatus);
+        bool UpdateSwitchStatus(SwitchStatus switchStatus);
         bool Save();
     }
 }

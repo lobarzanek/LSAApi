@@ -10,6 +10,7 @@ namespace LSAApi.Interfaces
         ICollection<ConfigurationVlan> GetConfigurationVlansByConfig(int configId);
         bool IsExist (int id);
         bool CreateConfigurationVlan(ConfigurationVlan configurationVlan);
+        bool UpdateConfigurationVlan(ConfigurationVlan configurationVlan);
         bool Save();
     }
 }

@@ -8,6 +8,7 @@ namespace LSAApi.Interfaces
         ICollection<Producent> GetProducents();
         bool IsExist(int id);
         bool CreateProducent(Producent producent);
+        bool UpdateProducent(Producent producent);
         bool Save();
     }
 }

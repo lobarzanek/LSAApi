@@ -20,7 +20,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(200, Type = typeof(IEnumerable<ConfigStatus>))]
+        [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
         [ProducesResponseType(400)]
         public IActionResult GetConfigStatuses()
         {
@@ -35,7 +35,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{configStatusId}")]
-        [ProducesResponseType(200, Type = typeof(ConfigStatus))]
+        [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
         public IActionResult GetConfigStatus(int configStatusId)
@@ -56,7 +56,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(201)]
+        [ProducesResponseType((201), Type = typeof(GetConfigStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateConfigStatus([FromBody] CreateConfigStatusDto newConfigStatus)
@@ -75,11 +75,46 @@ namespace LSAApi.Controllers
 
             if (!_configStatusRepository.CreateConfigStatus(configStatusMap))
             {
-                ModelState.AddModelError("", "Something went wrong whle saving");
+                ModelState.AddModelError("", "Something went wrong while saving");
                 return StatusCode(500, ModelState);
             }
 
             return Created("", _mapper.Map<GetConfigStatusDto>(configStatusMap));
+        }
+
+        [HttpPut]
+        [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult UpdateConfigStatus([FromBody] UpdateConfigStatusDto updateConfigStatus)
+        {
+
+            if (updateConfigStatus == null)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (!_configStatusRepository.IsExist(updateConfigStatus.ConfigStatusId))
+            {
+                return NotFound("Status not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var configStatusMap = _mapper.Map<ConfigStatus>(updateConfigStatus);
+
+            if (!_configStatusRepository.UpdateConfigStatus(configStatusMap))
+            {
+                ModelState.AddModelError("", "Something went wrong while updating");
+                return StatusCode(500, ModelState);
+            }
+
+            
+            return Ok(_mapper.Map<GetConfigStatusDto>(configStatusMap));
         }
     }
 }
