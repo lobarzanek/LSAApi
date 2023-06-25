@@ -117,5 +117,33 @@ namespace LSAApi.Controllers
 
             return Ok(_mapper.Map<GetSwitchStatusDto>(switchStatusMap));
         }
+
+        [HttpDelete("{switchStatusId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteSwitchStatus(int switchStatusId)
+        {
+            if (!_switchStatusRepository.IsExist(switchStatusId))
+            {
+                return NotFound("Status not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var switchstatus = _switchStatusRepository.GetSwitchStatus(switchStatusId);
+
+            if (!_switchStatusRepository.DeleteSwitchStatus(switchstatus))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting status");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

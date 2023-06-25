@@ -9,6 +9,7 @@ namespace LSAApi.Interfaces
         bool IsExist(int id);
         bool CreateConfigStatus(ConfigStatus configStatus);
         bool UpdateConfigStatus(ConfigStatus configStatus);
+        bool DeleteConfigStatus(ConfigStatus configStatus);
         bool Save();
     }
 }

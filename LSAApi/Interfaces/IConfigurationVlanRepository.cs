@@ -11,6 +11,7 @@ namespace LSAApi.Interfaces
         bool IsExist (int id);
         bool CreateConfigurationVlan(ConfigurationVlan configurationVlan);
         bool UpdateConfigurationVlan(ConfigurationVlan configurationVlan);
+        bool DeleteConfigurationVlan(ConfigurationVlan configurationVlan);
         bool Save();
     }
 }

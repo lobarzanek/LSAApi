@@ -10,6 +10,7 @@ namespace LSAApi.Interfaces
         bool IsExist(int modelId);
         bool CreateModel(Model model);
         bool UpdateModel(Model model);
+        bool DeleteModel(Model model);
         bool Save();
     }
 }

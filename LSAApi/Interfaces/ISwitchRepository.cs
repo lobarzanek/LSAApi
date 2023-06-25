@@ -12,6 +12,7 @@ namespace LSAApi.Interfaces
         bool IsExist(int switchId);
         bool CreateSwitch(Switch ethSwitch);
         bool UpdateSwitch(Switch ethSwitch);
+        bool DeleteSwitch(Switch ethSwitch);
         bool Save();
 
     }

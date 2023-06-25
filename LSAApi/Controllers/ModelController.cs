@@ -149,5 +149,33 @@ namespace LSAApi.Controllers
 
             return Ok(_mapper.Map<GetModelDto>(modelMap));
         }
+
+        [HttpDelete("{modelId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteModel(int modelId)
+        {
+            if (!_modelRepository.IsExist(modelId))
+            {
+                return NotFound("Status not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var model = _modelRepository.GetModel(modelId);
+
+            if (!_modelRepository.DeleteModel(model))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting model");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

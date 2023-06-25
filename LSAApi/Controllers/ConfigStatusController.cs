@@ -116,5 +116,33 @@ namespace LSAApi.Controllers
             
             return Ok(_mapper.Map<GetConfigStatusDto>(configStatusMap));
         }
+
+        [HttpDelete("{configStatusId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteConfigStatus(int configStatusId)
+        {
+            if (!_configStatusRepository.IsExist(configStatusId))
+            {
+                return NotFound("Status not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var configStatus = _configStatusRepository.GetConfigStatus(configStatusId);
+
+            if (!_configStatusRepository.DeleteConfigStatus(configStatus))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting status");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteConfigurationVlan(ConfigurationVlan configurationVlan)
+        {
+            _context.ConfigurationVlans.Remove(configurationVlan);
+            return Save();
+        }
+
         public ConfigurationVlan GetConfigurationVlan(int id)
         {
             return _context.ConfigurationVlans.Where(cv => cv.ConfigurationVlanId == id).FirstOrDefault();

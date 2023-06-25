@@ -9,6 +9,7 @@ namespace LSAApi.Interfaces
         bool IsExist(int id);
         bool CreateProducent(Producent producent);
         bool UpdateProducent(Producent producent);
+        bool DeleteProducent(Producent producent);
         bool Save();
     }
 }

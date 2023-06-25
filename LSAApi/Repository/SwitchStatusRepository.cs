@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteSwitchStatus(SwitchStatus switchStatus)
+        {
+            _context.SwitchStatuses.Remove(switchStatus);
+            return Save();
+        }
+
         public SwitchStatus GetSwitchStatus(int id)
         {
             return _context.SwitchStatuses.Where(ss => ss.SwitchStatusId == id).FirstOrDefault();

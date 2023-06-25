@@ -203,6 +203,8 @@ namespace LSAApi.Controllers
 
             var configurationMap = _mapper.Map<Configuration>(updateConfiguration);
 
+            configurationMap.CreateDate = _configurationRepository.GetConfigurationById(updateConfiguration.ConfigurationId).CreateDate;
+
             if (!_configurationRepository.UpdateConfiguration(configurationMap))
             {
                 ModelState.AddModelError("", "Something went wrong while updating");
@@ -213,6 +215,33 @@ namespace LSAApi.Controllers
             return Ok(_mapper.Map<GetConfigurationDto>(configurationMap));
         }
 
+        [HttpDelete("{configurationId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteConfiguration(int configurationId)
+        {
+            if (!_configurationRepository.IsExist(configurationId))
+            {
+                return NotFound("Configuration not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var configuration = _configurationRepository.GetConfigurationById(configurationId);
+
+            if (!_configurationRepository.DeleteConfiguration(configuration))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting category");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
 
     }
 }

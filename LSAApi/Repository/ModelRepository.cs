@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteModel(Model model)
+        {
+            _context.Models.Remove(model);
+            return Save();
+        }
+
         public Model GetModel(int modelId)
         {
             return _context.Models.Where(m => m.ModelId == modelId)

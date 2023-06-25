@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteUser(User user)
+        {
+            _context.Users.Remove(user);
+            return Save();
+        }
+
         public User GetUser(int userId)
         {
             return _context.Users.Where(u => u.UserId == userId).FirstOrDefault();

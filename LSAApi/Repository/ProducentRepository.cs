@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteProducent(Producent producent)
+        {
+            _context.Producents.Remove(producent);
+            return Save();
+        }
+
         public Producent GetProducent(int id)
         {
             return _context.Producents.Where(p => p.ProducentId == id).FirstOrDefault();

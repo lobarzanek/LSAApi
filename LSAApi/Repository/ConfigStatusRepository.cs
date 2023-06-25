@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteConfigStatus(ConfigStatus configStatus)
+        {
+            _context.ConfigStatuses.Remove(configStatus);
+            return Save();
+        }
+
         public ConfigStatus GetConfigStatus(int id)
         {
             return _context.ConfigStatuses.Where(cs => cs.ConfigStatusId == id).FirstOrDefault();

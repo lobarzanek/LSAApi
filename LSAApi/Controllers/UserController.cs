@@ -194,5 +194,33 @@ namespace LSAApi.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{userId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteUser(int userId)
+        {
+            if (!_userRepository.IsExist(userId))
+            {
+                return NotFound("User not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var user = _userRepository.GetUser(userId);
+
+            if (!_userRepository.DeleteUser(user))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting status");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

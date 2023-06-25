@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteRole(Role role)
+        {
+            _context.Roles.Remove(role);
+            return Save();
+        }
+
         public Role GetRole(int id)
         {
             return _context.Roles.Where(r => r.RoleId == id).FirstOrDefault();

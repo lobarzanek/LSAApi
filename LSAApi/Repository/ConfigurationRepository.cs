@@ -20,6 +20,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteConfiguration(Configuration configuration)
+        {
+            _context.Configurations.Remove(configuration);
+            return Save();
+        }
+
         public ICollection<Configuration> GetAllConfigurations()
         {
             return _context.Configurations.OrderBy(c => c.ConfigurationId).ToList();
@@ -58,8 +64,13 @@ namespace LSAApi.Repository
 
         public bool UpdateConfiguration(Configuration configuration)
         {
+            // to avoid tracking issue
+            _context.ChangeTracker.Clear();
+
             _context.Configurations.Update(configuration);
             return Save();
         }
+
+
     }
 }

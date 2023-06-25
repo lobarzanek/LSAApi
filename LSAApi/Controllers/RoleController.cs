@@ -118,5 +118,33 @@ namespace LSAApi.Controllers
 
             return Ok(_mapper.Map<GetRoleDto>(roleMap));
         }
+
+        [HttpDelete("{roleId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteRole(int roleId)
+        {
+            if (!_roleRepository.IsExist(roleId))
+            {
+                return NotFound("Role not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var role = _roleRepository.GetRole(roleId);
+
+            if (!_roleRepository.DeleteRole(role))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting role");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

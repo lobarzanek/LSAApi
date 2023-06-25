@@ -10,6 +10,7 @@ namespace LSAApi.Interfaces
         bool IsExist(int id);
         bool CreateRole(Role role);
         bool UpdateRole(Role role);
+        bool DeleteRole(Role role);
         bool Save();
     }
 }

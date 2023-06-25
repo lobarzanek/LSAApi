@@ -196,17 +196,17 @@ namespace LSAApi.Controllers
             {
                 return NotFound("Switch not found");
             }
-            //model
+            
             if (!_modelRepository.IsExist(updateSwitch.ModelId))
             {
                 return NotFound("Model not found");
             }
-            //status
+            
             if (!_switchStatusRepository.IsExist(updateSwitch.SwitchStatusId))
             {
                 return NotFound("Status not found");
             }
-            //section
+            
             if (updateSwitch.SectionId != null && !_sectionRepository.IsExist(updateSwitch.SectionId.Value))
             {
                 return NotFound("Section not found");
@@ -269,6 +269,34 @@ namespace LSAApi.Controllers
 
 
             return Ok();
+        }
+
+        [HttpDelete("{switchId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteSwitch(int switchId)
+        {
+            if (!_switchRepository.IsExist(switchId))
+            {
+                return NotFound("Switch not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var ethSwitch = _switchRepository.GetSwitch(switchId);
+
+            if (!_switchRepository.DeleteSwitch(ethSwitch))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting status");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
         }
 
     }

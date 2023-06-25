@@ -164,5 +164,33 @@ namespace LSAApi.Controllers
 
             return Ok(_mapper.Map<GetConfigurationVlanDto>(configurationVlanMap));
         }
+
+        [HttpDelete("{configurationVlanId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteConfigurationVlan(int configurationVlanId)
+        {
+            if (!_configurationVlanRepository.IsExist(configurationVlanId))
+            {
+                return NotFound("Configuration Vlan not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var configurationVlan = _configurationVlanRepository.GetConfigurationVlan(configurationVlanId);
+
+            if (!_configurationVlanRepository.DeleteConfigurationVlan(configurationVlan))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting configuration vlan");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

@@ -13,6 +13,7 @@ namespace LSAApi.Interfaces
         bool IsExist(int configId);
         bool CreateConfiguration(Configuration configuration);
         bool UpdateConfiguration(Configuration configuration);
+        bool DeleteConfiguration(Configuration configuration);
         bool Save();
 
     }

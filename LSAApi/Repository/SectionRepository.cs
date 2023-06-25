@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteSection(Section section)
+        {
+            _context.Sections.Remove(section);
+            return Save();
+        }
+
         public Section GetSection(int sectionId)
         {
             return _context.Sections.Where(s => s.SectionId == sectionId).FirstOrDefault();

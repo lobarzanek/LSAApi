@@ -19,6 +19,12 @@ namespace LSAApi.Repository
             return Save();
         }
 
+        public bool DeleteSwitch(Switch ethSwitch)
+        {
+            _context.Switches.Remove(ethSwitch);
+            return Save();
+        }
+
         public Switch GetSwitch(int switchId)
         {
             return _context.Switches.Where(s => s.SwitchId == switchId).FirstOrDefault();

@@ -116,5 +116,33 @@ namespace LSAApi.Controllers
 
             return Ok(_mapper.Map<GetSectionDto>(sectionMap));
         }
+
+        [HttpDelete("{sectionId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteSection(int sectionId)
+        {
+            if (!_sectionRepository.IsExist(sectionId))
+            {
+                return NotFound("Section not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var section = _sectionRepository.GetSection(sectionId);
+
+            if (!_sectionRepository.DeleteSection(section))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting status");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }

@@ -9,6 +9,7 @@ namespace LSAApi.Interfaces
         bool IsExist(int id);
         bool CreateSwitchStatus(SwitchStatus switchStatus);
         bool UpdateSwitchStatus(SwitchStatus switchStatus);
+        bool DeleteSwitchStatus(SwitchStatus switchStatus);
         bool Save();
     }
 }

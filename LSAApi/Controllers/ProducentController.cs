@@ -117,5 +117,33 @@ namespace LSAApi.Controllers
 
             return Ok(_mapper.Map<GetProducentDto>(producentMap));
         }
+
+        [HttpDelete("{producentId}")]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        [ProducesResponseType(500)]
+        public IActionResult DeleteProducent(int producentId)
+        {
+            if (!_producentRepository.IsExist(producentId))
+            {
+                return NotFound("Producent not found");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var producent = _producentRepository.GetProducent(producentId);
+
+            if (!_producentRepository.DeleteProducent(producent))
+            {
+                ModelState.AddModelError("", "Something went wrong deleting producent");
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }
