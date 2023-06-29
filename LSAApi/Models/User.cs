@@ -6,8 +6,8 @@
         public string UserName { get; set; }
         public string UserLogin { get; set; }
         public string UserPassword { get; set; }
-        public int RoleId { get; set; }
-        public Role Role { get; set; }
+        public int? RoleId { get; set; }
+        public Role? Role { get; set; }
         public ICollection<Configuration> Configurations { get; set; }
     }
 }
