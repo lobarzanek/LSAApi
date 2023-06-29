@@ -7,7 +7,7 @@ namespace LSAApi.Dto
         public int ModelId { get; set; }
         public string ModelName { get; set; }
         public int ModelPortNumber { get; set; }
-        public int ProducentId { get; set; }
+        public int? ProducentId { get; set; }
 
     }
 }

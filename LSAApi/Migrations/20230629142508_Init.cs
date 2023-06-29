@@ -99,7 +99,7 @@ namespace LSAApi.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelPortNumber = table.Column<int>(type: "int", nullable: false),
-                    ProducentId = table.Column<int>(type: "int", nullable: false)
+                    ProducentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -109,7 +109,7 @@ namespace LSAApi.Migrations
                         column: x => x.ProducentId,
                         principalTable: "Producents",
                         principalColumn: "ProducentId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -121,7 +121,7 @@ namespace LSAApi.Migrations
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserLogin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -131,7 +131,7 @@ namespace LSAApi.Migrations
                         column: x => x.RoleId,
                         principalTable: "Roles",
                         principalColumn: "RoleId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -145,8 +145,8 @@ namespace LSAApi.Migrations
                     SwitchLogin = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SwitchPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SwitchNetbox = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ModelId = table.Column<int>(type: "int", nullable: false),
-                    SwitchStatusId = table.Column<int>(type: "int", nullable: false),
+                    ModelId = table.Column<int>(type: "int", nullable: true),
+                    SwitchStatusId = table.Column<int>(type: "int", nullable: true),
                     SectionId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -157,18 +157,19 @@ namespace LSAApi.Migrations
                         column: x => x.ModelId,
                         principalTable: "Models",
                         principalColumn: "ModelId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Switches_Sections_SectionId",
                         column: x => x.SectionId,
                         principalTable: "Sections",
-                        principalColumn: "SectionId");
+                        principalColumn: "SectionId",
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Switches_SwitchStatuses_SwitchStatusId",
                         column: x => x.SwitchStatusId,
                         principalTable: "SwitchStatuses",
                         principalColumn: "SwitchStatusId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -178,9 +179,9 @@ namespace LSAApi.Migrations
                     ConfigurationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    SwitchId = table.Column<int>(type: "int", nullable: false),
-                    ConfigStatusId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    SwitchId = table.Column<int>(type: "int", nullable: true),
+                    ConfigStatusId = table.Column<int>(type: "int", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -190,19 +191,19 @@ namespace LSAApi.Migrations
                         column: x => x.ConfigStatusId,
                         principalTable: "ConfigStatuses",
                         principalColumn: "ConfigStatusId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Configurations_Switches_SwitchId",
                         column: x => x.SwitchId,
                         principalTable: "Switches",
                         principalColumn: "SwitchId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Configurations_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(
@@ -212,8 +213,8 @@ namespace LSAApi.Migrations
                     ConfigurationVlanId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     portNumber = table.Column<int>(type: "int", nullable: false),
-                    ConfigurationId = table.Column<int>(type: "int", nullable: false),
-                    VlanId = table.Column<int>(type: "int", nullable: false)
+                    ConfigurationId = table.Column<int>(type: "int", nullable: true),
+                    VlanId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -223,13 +224,13 @@ namespace LSAApi.Migrations
                         column: x => x.ConfigurationId,
                         principalTable: "Configurations",
                         principalColumn: "ConfigurationId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_ConfigurationVlans_Vlans_VlanId",
                         column: x => x.VlanId,
                         principalTable: "Vlans",
                         principalColumn: "VlanId",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(

@@ -8,8 +8,8 @@ namespace LSAApi.Dto
         public string SwitchName { get; set; }
         public string SwitchIpAddress { get; set; }
         public string SwitchNetbox { get; set; }
-        public int ModelId { get; set; }
-        public int SwitchStatusId { get; set; }
+        public int? ModelId { get; set; }
+        public int? SwitchStatusId { get; set; }
         public int? SectionId { get; set; }
 
     }

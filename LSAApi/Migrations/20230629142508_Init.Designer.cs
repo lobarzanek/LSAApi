@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LSAApi.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230624153458_Init")]
+    [Migration("20230629142508_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -50,16 +50,16 @@ namespace LSAApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConfigurationId"));
 
-                    b.Property<int>("ConfigStatusId")
+                    b.Property<int?>("ConfigStatusId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreateDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("SwitchId")
+                    b.Property<int?>("SwitchId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("ConfigurationId");
@@ -81,10 +81,10 @@ namespace LSAApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ConfigurationVlanId"));
 
-                    b.Property<int>("ConfigurationId")
+                    b.Property<int?>("ConfigurationId")
                         .HasColumnType("int");
 
-                    b.Property<int>("VlanId")
+                    b.Property<int?>("VlanId")
                         .HasColumnType("int");
 
                     b.Property<int>("portNumber")
@@ -114,7 +114,7 @@ namespace LSAApi.Migrations
                     b.Property<int>("ModelPortNumber")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProducentId")
+                    b.Property<int?>("ProducentId")
                         .HasColumnType("int");
 
                     b.HasKey("ModelId");
@@ -183,7 +183,7 @@ namespace LSAApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SwitchId"));
 
-                    b.Property<int>("ModelId")
+                    b.Property<int?>("ModelId")
                         .HasColumnType("int");
 
                     b.Property<int?>("SectionId")
@@ -209,7 +209,7 @@ namespace LSAApi.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("SwitchStatusId")
+                    b.Property<int?>("SwitchStatusId")
                         .HasColumnType("int");
 
                     b.HasKey("SwitchId");
@@ -248,7 +248,7 @@ namespace LSAApi.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
 
-                    b.Property<int>("RoleId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserLogin")
@@ -300,20 +300,17 @@ namespace LSAApi.Migrations
                     b.HasOne("LSAApi.Models.ConfigStatus", "ConfigStatus")
                         .WithMany("Configurations")
                         .HasForeignKey("ConfigStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("LSAApi.Models.Switch", "Switch")
                         .WithMany("Configurations")
                         .HasForeignKey("SwitchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("LSAApi.Models.User", "User")
                         .WithMany("Configurations")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ConfigStatus");
 
@@ -327,14 +324,12 @@ namespace LSAApi.Migrations
                     b.HasOne("LSAApi.Models.Configuration", "Configuration")
                         .WithMany("ConfigurationVlans")
                         .HasForeignKey("ConfigurationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("LSAApi.Models.Vlan", "Vlan")
                         .WithMany("ConfigurationVlans")
                         .HasForeignKey("VlanId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Configuration");
 
@@ -346,8 +341,7 @@ namespace LSAApi.Migrations
                     b.HasOne("LSAApi.Models.Producent", "Producent")
                         .WithMany("Models")
                         .HasForeignKey("ProducentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Producent");
                 });
@@ -357,18 +351,17 @@ namespace LSAApi.Migrations
                     b.HasOne("LSAApi.Models.Model", "Model")
                         .WithMany("Switchs")
                         .HasForeignKey("ModelId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("LSAApi.Models.Section", "Section")
                         .WithMany("Switchs")
-                        .HasForeignKey("SectionId");
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("LSAApi.Models.SwitchStatus", "SwitchStatus")
                         .WithMany("Switches")
                         .HasForeignKey("SwitchStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Model");
 
@@ -382,8 +375,7 @@ namespace LSAApi.Migrations
                     b.HasOne("LSAApi.Models.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Role");
                 });
