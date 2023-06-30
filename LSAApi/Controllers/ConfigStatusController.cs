@@ -2,7 +2,9 @@
 using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -19,9 +21,11 @@ namespace LSAApi.Controllers
             _mapper = mapper;
         }
 
+        
         [HttpGet]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
-        [ProducesResponseType(400)]
+        [ProducesResponseType(400)]        
         public IActionResult GetConfigStatuses()
         {
             var configStatuses = _mapper.Map<List<GetConfigStatusDto>>(_configStatusRepository.GetConfigStatuses());
