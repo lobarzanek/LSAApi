@@ -1,4 +1,5 @@
-﻿using LSAApi.Interfaces;
+﻿using LSAApi.Dto;
+using LSAApi.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -24,14 +25,14 @@ namespace LSAApi.Controllers
         [ProducesResponseType((200), Type = typeof(JwtSecurityTokenHandler))]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
-        public IActionResult Login([FromQuery] string username, [FromQuery] string password)
+        public IActionResult Login([FromBody] UserLoginDto userLoginDto)
         {
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            if (string.IsNullOrEmpty(userLoginDto.UserLogin) || string.IsNullOrEmpty(userLoginDto.UserPassword))
             {
                 return BadRequest();
             }
 
-            var user = _userRepository.UserLogin(username, password);
+            var user = _userRepository.UserLogin(userLoginDto.UserLogin, userLoginDto.UserPassword);
 
             if (user == null)
             {
