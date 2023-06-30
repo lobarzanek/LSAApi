@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using LSAApi.Authorization;
 using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
@@ -14,14 +15,15 @@ namespace LSAApi.Controllers
     {
         private readonly IConfigStatusRepository _configStatusRepository;
         private readonly IMapper _mapper;
+        
 
         public ConfigStatusController(IConfigStatusRepository configStatusRepository, IMapper mapper)
         {
             _configStatusRepository = configStatusRepository;
             _mapper = mapper;
         }
-
         
+
         [HttpGet]
         [Authorize]
         [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
@@ -39,6 +41,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{configStatusId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -60,11 +63,13 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "1")]
         [ProducesResponseType((201), Type = typeof(GetConfigStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
         public IActionResult CreateConfigStatus([FromBody] CreateConfigStatusDto newConfigStatus)
         {
+
             if (newConfigStatus == null)
             {
                 return BadRequest(ModelState);
@@ -87,6 +92,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "1")]
         [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -122,6 +128,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{configStatusId}")]
+        [Authorize(Roles = "1")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

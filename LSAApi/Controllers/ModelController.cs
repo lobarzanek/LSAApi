@@ -3,7 +3,9 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -23,6 +25,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetModelDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetModels()
@@ -38,6 +41,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{modelId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetModelDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -59,6 +63,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("producent/{producentId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetModelDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -80,6 +85,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType((201), Type = typeof(GetModelDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -112,6 +118,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetModelDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -151,6 +158,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{modelId}")]
+        [Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

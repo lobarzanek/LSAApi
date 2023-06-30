@@ -3,7 +3,9 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -21,6 +23,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchStatusDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetConfigStatuses()
@@ -36,6 +39,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{switchStatusId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(GetSwitchStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -57,6 +61,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "1")]
         [ProducesResponseType((201), Type = typeof(GetSwitchStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -84,6 +89,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "1")]
         [ProducesResponseType((200), Type = typeof(GetConfigStatusDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -119,6 +125,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{switchStatusId}")]
+        [Authorize(Roles = "1")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

@@ -3,7 +3,9 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -21,6 +23,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Section>))]
         [ProducesResponseType(400)]
         public IActionResult GetSections()
@@ -35,6 +38,7 @@ namespace LSAApi.Controllers
             return Ok(sections);
         }
         [HttpGet("{sectionId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(Section))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -56,6 +60,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType((201), Type = typeof(GetSectionDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -83,6 +88,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetSectionDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -118,6 +124,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{sectionId}")]
+        [Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

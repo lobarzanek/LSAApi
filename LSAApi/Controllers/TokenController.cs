@@ -1,5 +1,7 @@
 ﻿using LSAApi.Dto;
 using LSAApi.Interfaces;
+using LSAApi.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -22,6 +24,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType((200), Type = typeof(JwtSecurityTokenHandler))]
         [ProducesResponseType(401)]
         [ProducesResponseType(403)]
@@ -40,10 +43,10 @@ namespace LSAApi.Controllers
             }
 
             var claims = new[] {
-                        new Claim("UserId", user.UserId.ToString()),
-                        new Claim("UserName", user.UserName),
+                        new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                        new Claim(ClaimTypes.Name, user.UserName),
                         new Claim("UserLogin", user.UserLogin),
-                        new Claim("Role", user.RoleId.ToString())
+                        new Claim(ClaimTypes.Role, user.RoleId.ToString())
                     };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
@@ -58,5 +61,7 @@ namespace LSAApi.Controllers
 
             return Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
+
+        
     }
 }
