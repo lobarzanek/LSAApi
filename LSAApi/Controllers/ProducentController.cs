@@ -3,8 +3,10 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -22,6 +24,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetProducentDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetProducents()
@@ -36,6 +39,7 @@ namespace LSAApi.Controllers
             return Ok(producents);
         }
         [HttpGet("{producentId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(GetProducentDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -57,6 +61,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType((201), Type = typeof(GetProducentDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -84,6 +89,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetProducentDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -119,6 +125,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{producentId}")]
+        [Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

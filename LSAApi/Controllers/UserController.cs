@@ -3,7 +3,9 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -22,6 +24,7 @@ namespace LSAApi.Controllers
             _mapper = mapper;
         }
         [HttpGet]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetUserDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetUsers()
@@ -37,6 +40,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{userId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(GetUserDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -58,6 +62,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("role/{roleId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetUserDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetUsersByRole(int roleId)
@@ -78,6 +83,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "1")]
         [ProducesResponseType((201), Type = typeof(GetUserDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -110,6 +116,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "1")]
         [ProducesResponseType((200), Type = typeof(GetUserDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -153,6 +160,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut("password")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
@@ -196,6 +204,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{userId}")]
+        [Authorize(Roles = "1")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

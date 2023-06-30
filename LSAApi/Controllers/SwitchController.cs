@@ -3,7 +3,9 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -28,6 +30,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitches()
@@ -43,6 +46,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{switchId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(GetSwitchDto))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitch(int switchId)
@@ -63,6 +67,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("model/{modelId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchesByModel(int modelId)
@@ -83,6 +88,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("status/{statusId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchesByStatus(int statusId)
@@ -103,6 +109,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("section/{sectionId}")]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetSwitchDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchesBySection(int sectionId)
@@ -123,6 +130,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("credentials/{switchId}")]
+        [Authorize(Roles = "1,2")]
         [ProducesResponseType(200, Type = typeof(GetSwitchCredentialsDto))]
         [ProducesResponseType(400)]
         public IActionResult GetSwitchCredentials(int switchId)
@@ -143,6 +151,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType((201), Type = typeof(GetSwitchDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -180,6 +189,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetSwitchDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -234,6 +244,7 @@ namespace LSAApi.Controllers
             return Ok(_mapper.Map<GetSwitchDto>(switchMap));
         }
         [HttpPut("credentials")]
+        [Authorize]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -272,6 +283,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{switchId}")]
+        [Authorize]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

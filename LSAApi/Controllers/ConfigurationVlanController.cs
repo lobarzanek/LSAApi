@@ -3,7 +3,9 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -26,6 +28,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetConfigurationVlanDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetConfigurationVlans()
@@ -41,6 +44,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("{configVlanId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetConfigurationVlanDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -62,6 +66,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("configuration/{configurationId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetConfigurationVlanDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -83,6 +88,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "1,2")]
         [ProducesResponseType((201), Type = typeof(GetConfigurationVlanDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -121,6 +127,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "1")]
         [ProducesResponseType((200), Type = typeof(GetConfigurationVlanDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -166,6 +173,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{configurationVlanId}")]
+        [Authorize(Roles = "1")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]

@@ -59,5 +59,10 @@ namespace LSAApi.Repository
             _context.Users.Update(user);
             return Save();
         }
+
+        public User UserLogin(string login, string password)
+        {
+            return _context.Users.Where(u => u.UserLogin == login && u.UserPassword == password).FirstOrDefault();
+        }
     }
 }

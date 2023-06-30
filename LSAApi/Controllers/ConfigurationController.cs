@@ -3,7 +3,9 @@ using LSAApi.Dto;
 using LSAApi.Interfaces;
 using LSAApi.Models;
 using LSAApi.Repository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LSAApi.Controllers
 {
@@ -31,6 +33,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         [ProducesResponseType(200, Type = typeof(IEnumerable<GetConfigurationDto>))]
         [ProducesResponseType(400)]
         public IActionResult GetConfigurations()
@@ -45,6 +48,7 @@ namespace LSAApi.Controllers
             return Ok(configurations);
         }
         [HttpGet("{configurationId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(GetConfigurationDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -66,6 +70,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("switch/{switchId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetConfigurationDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -88,6 +93,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("user/{userId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetConfigurationDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -109,6 +115,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpGet("status/{statusId}")]
+        [Authorize]
         [ProducesResponseType((200), Type = typeof(IEnumerable<GetConfigurationDto>))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -131,6 +138,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType((201), Type = typeof(GetConfigurationDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(500)]
@@ -170,6 +178,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = "1,2")]
         [ProducesResponseType((200), Type = typeof(GetConfigurationDto))]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
@@ -216,6 +225,7 @@ namespace LSAApi.Controllers
         }
 
         [HttpDelete("{configurationId}")]
+        [Authorize(Roles = "1")]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
         [ProducesResponseType(404)]
