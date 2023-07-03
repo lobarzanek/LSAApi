@@ -31,7 +31,7 @@ namespace LSAApi.Tests.Controllers
         public void ConfigStatusController_GetConfigStatuses_ReturnOK()
         {
             //Arrange
-            var configStatuses = A.Fake<ICollection<GetConfigStatusDto>>();
+            var configStatuses = A.Fake<ICollection<ConfigStatus>>();
             var configStatusesList = A.Fake<List<GetConfigStatusDto>>();
             A.CallTo(() => _mapper.Map<List<GetConfigStatusDto>>(configStatuses))
                 .Returns(configStatusesList);
