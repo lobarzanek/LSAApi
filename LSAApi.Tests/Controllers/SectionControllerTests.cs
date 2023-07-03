@@ -107,7 +107,7 @@ namespace LSAApi.Tests.Controllers
         }
 
         [Fact]
-        public void SectionController_DeleteSection_ReturnsOK()
+        public void SectionController_DeleteSection_ReturnsNoContent()
         {
             //Arrange
             int id = 1;
