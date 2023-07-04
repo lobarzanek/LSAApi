@@ -47,8 +47,6 @@ builder.Services.AddDbContext<DataContext>(options =>
     //for default connection
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 
-    //for second connection
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("SecondConnetion"));
 });
 
 
