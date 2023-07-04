@@ -27,14 +27,14 @@ namespace LSAApi.Controllers
         [ProducesResponseType(400)]
         public IActionResult GetVlans()
         {
-            var configStatuses = _mapper.Map<List<GetVlanDto>>(_vlanRepository.GetVlans());
+            var vlans = _mapper.Map<List<GetVlanDto>>(_vlanRepository.GetVlans());
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            return Ok(configStatuses);
+            return Ok(vlans);
         }
 
         [HttpGet("{vlanId}")]
