@@ -9,12 +9,6 @@ The project also includes unit tests that are written using tools such as FakeIt
 
 Before launching the project, configure the Connection String in the appsettings.json file.
 
-Delete the Migrations folder and then run the commands:
-```
-Add-Migration Init
-Update-Database
-```
-
 You can use a prepared [SQL Insert Query](https://github.com/b0r55uk/LSAApi/blob/master/SQLInsertQuery.sql) to populate the database with test data
 
 
